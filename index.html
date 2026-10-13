@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HemoPulse™ | Blood Bank Management System</title>
+  <meta name="description" content="State-of-the-art Blood Bank Management System featuring real-time inventory tracking, donor management, compatibility matrix, and interactive JDBC database workbench.">
+  
+  <!-- Modern Typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- =========================================================================
+       APP HEADER & NAVIGATION
+       ========================================================================= -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-wrapper">
+        <div class="brand-logo" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>HemoPulse™</h1>
+          <span class="subtext">Blood Bank &amp; Donor Management</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs" role="tablist" aria-label="Main Navigation">
+        <button type="button" class="nav-tab-btn active" data-tab="dashboard" role="tab" id="tab-btn-dashboard" aria-controls="tab-dashboard" aria-selected="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Overview
+        </button>
+        <button type="button" class="nav-tab-btn" data-tab="eligibility" role="tab" id="tab-btn-eligibility" aria-controls="tab-eligibility" aria-selected="false">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          Eligibility Calculator
+        </button>
+        <button type="button" class="nav-tab-btn" data-tab="donors" role="tab" id="tab-btn-donors" aria-controls="tab-donors" aria-selected="false">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Donors
+        </button>
+        <button type="button" class="nav-tab-btn" data-tab="inventory" role="tab" id="tab-btn-inventory" aria-controls="tab-inventory" aria-selected="false">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          Blood Stock Ledger
+        </button>
+        <button type="button" class="nav-tab-btn" data-tab="requests" role="tab" id="tab-btn-requests" aria-controls="tab-requests" aria-selected="false">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Hospital Orders
+        </button>
+        <button type="button" class="nav-tab-btn" data-tab="sqlcommands" role="tab" id="tab-btn-sqlcommands" aria-controls="tab-sqlcommands" aria-selected="false">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          DDL &amp; DML Commands
+          <span class="badge-pill">SQL Center</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-tab="studio" role="tab" id="tab-btn-studio" aria-controls="tab-studio" aria-selected="false">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          Database &amp; JDBC Studio
+          <span class="badge-pill">SQL Studio</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-tab="guide" role="tab" id="tab-btn-guide" aria-controls="tab-guide" aria-selected="false">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          System Guide
+          <span class="badge-pill" style="background:var(--secondary); color:#fff;">Setup</span>
+        </button>
+      </nav>
+
+      <!-- Header Action Controls -->
+      <div class="header-actions">
+        <a href="login.html" class="btn-secondary" title="Open Dedicated Login Portal" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem; font-size:0.8rem; padding:0.45rem 0.75rem; font-weight:700;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Login Portal
+        </a>
+        <button type="button" class="btn-icon" id="theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button type="button" class="btn-icon" id="reset-db-btn" title="Reset to Lab Default State" aria-label="Reset database state">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </button>
+        <button type="button" class="btn-emergency" id="open-new-request-btn" aria-label="Emergency blood request">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+          Emergency Request
+        </button>
+        <div id="header-auth-section">
+          <!-- Dynamically populated via app.js with User Profile & Sign Out / Sign In buttons -->
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       LOGIN & AUTHENTICATION SCREEN
+       ========================================================================= -->
+  <section class="auth-overlay" id="auth-screen" aria-label="Portal Authentication" style="display:none;">
+    <div class="auth-card">
+      <button type="button" class="modal-close-btn" id="close-auth-screen-btn" title="Close / Continue to Dashboard" aria-label="Close dialog">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="auth-brand">
+        <div class="auth-brand-logo" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+        </div>
+        <h2>Sign In to HemoPulse™</h2>
+        <p>Blood Bank &amp; Transfusion Management Portal</p>
+      </div>
+
+      <!-- Quick-Fill Demo Roles Section -->
+      <div class="quick-roles-section">
+        <div class="quick-roles-title">
+          <span>Demo Quick Login</span>
+          <span style="font-size:0.65rem; color:var(--primary); font-weight:800;">1-Click Fill</span>
+        </div>
+        <div class="quick-roles-chips">
+          <button type="button" class="role-chip-btn" data-username="admin@hemopulse.org" data-password="admin123" data-role="Admin">
+            <span>👑 Admin</span>
+            <small style="color:var(--text-muted); font-size:0.65rem;">Full Control</small>
+          </button>
+          <button type="button" class="role-chip-btn" data-username="lab@hemopulse.org" data-password="lab123" data-role="Lab Technician">
+            <span>🔬 Lab Tech</span>
+            <small style="color:var(--text-muted); font-size:0.65rem;">Inventory</small>
+          </button>
+          <button type="button" class="role-chip-btn" data-username="doctor@apollo.org" data-password="apollo123" data-role="Hospital Doctor">
+            <span>🏥 Doctor</span>
+            <small style="color:var(--text-muted); font-size:0.65rem;">Transfusions</small>
+          </button>
+        </div>
+      </div>
+
+      <!-- Login Form -->
+      <form id="auth-login-form">
+        <div class="form-group" style="margin-bottom:1.15rem;">
+          <label for="login-username">Staff Username or Email *</label>
+          <div class="input-icon-wrap">
+            <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" id="login-username" name="username" required placeholder="admin@hemopulse.org" autocomplete="username">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label for="login-password">Access Password *</label>
+          <div class="input-icon-wrap">
+            <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="login-password" name="password" required placeholder="••••••••" autocomplete="current-password">
+            <button type="button" class="toggle-password-btn" id="toggle-password-btn" title="Show/Hide Password" aria-label="Toggle password visibility">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="auth-options-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="remember-me-checkbox" checked>
+            <span>Remember session</span>
+          </label>
+          <a href="#" class="forgot-link" id="forgot-password-link">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-primary auth-submit-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Sign In to Portal
+        </button>
+      </form>
+
+      <div class="auth-security-notice">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--success)"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div>
+          <strong>PreparedStatement Authentication:</strong> Validated against Oracle Database using parameterized parameter binding to eliminate SQL Injection (Slide 48).
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================= -->
+  <main class="app-main" id="main-content">
+
+    <!-- Hero Laboratory Banner -->
+    <section class="hero-banner" aria-label="Laboratory Overview Banner">
+      <div class="hero-content">
+        <h2>Hospital Blood Bank &amp; <span>Donor Management</span></h2>
+        <p>
+          Enterprise healthcare management platform integrating secure front-end interfaces with relational database operations via Java JDBC, PreparedStatement parameter binding, ACID transaction management (COMMIT / ROLLBACK), and real-time blood inventory monitoring.
+        </p>
+        <div class="hero-badges">
+          <span class="tech-chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Oracle XE / SQL*Plus
+          </span>
+          <span class="tech-chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Java JDBC 4.2
+          </span>
+          <span class="tech-chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            ODBC DSN Architecture
+          </span>
+          <span class="tech-chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            ACID Transactions
+          </span>
+        </div>
+      </div>
+      <div class="hero-image-wrap">
+        <img src="assets/hero.jpg" alt="Blood Bank Management Modern Laboratory Overview with Blood Storage Chillers and Vital Signs Monitors" loading="eager" fetchpriority="high">
+      </div>
+    </section>
+
+    <!-- Global KPI Metrics Bar -->
+    <section class="stats-grid" aria-label="Key Performance Indicators">
+      <article class="stat-card">
+        <div class="stat-info">
+          <div class="stat-label">Total Blood Units</div>
+          <div class="stat-value" id="kpi-total-units">166</div>
+          <div class="stat-sub"><span style="color:var(--success);">● Active Reserve</span> in 4 Chiller Vaults</div>
+        </div>
+        <div class="stat-icon red">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-info">
+          <div class="stat-label">Registered Donors</div>
+          <div class="stat-value" id="kpi-active-donors">8</div>
+          <div class="stat-sub"><span style="color:var(--secondary);">● SID Keyed</span> in DONOR Table</div>
+        </div>
+        <div class="stat-icon blue">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-info">
+          <div class="stat-label">Pending Orders</div>
+          <div class="stat-value" id="kpi-pending-requests">1</div>
+          <div class="stat-sub"><span style="color:var(--warning);">● Awaiting</span> Hospital Dispatch</div>
+        </div>
+        <div class="stat-icon purple">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-info">
+          <div class="stat-label">Critical Shortages</div>
+          <div class="stat-value" id="kpi-critical-shortage" style="color:var(--danger);">2</div>
+          <div class="stat-sub"><span style="color:var(--danger);">● AB- &amp; O-</span> below safety threshold</div>
+        </div>
+        <div class="stat-icon red">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+      </article>
+    </section>
+
+    <!-- =======================================================================
+         TAB 1: DASHBOARD & LIVE INVENTORY OVERVIEW
+         ======================================================================= -->
+    <section class="tab-view active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-btn-dashboard">
+      
+      <!-- Dashboard User Session & Authentication Bar (Sign Out Option on Main Dashboard) -->
+      <div class="dashboard-session-bar" id="dashboard-session-bar">
+        <!-- Dynamically rendered via app.js with Active Session info, Switch Role & Sign Out buttons -->
+      </div>
+      
+      <!-- Blood Inventory Section (8 Types) -->
+      <div class="blood-inventory-section">
+        <div class="section-header">
+          <div class="section-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--primary)"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            <h3>Live Blood Inventory (8 Groups)</h3>
+            <span class="count-badge">Updated Real-Time</span>
+          </div>
+          <button type="button" class="btn-secondary" id="open-add-bag-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Intake New Blood Bag
+          </button>
+        </div>
+
+        <div class="inventory-grid" id="inventory-cards-grid">
+          <!-- Dynamically populated via app.js -->
+        </div>
+      </div>
+
+      <!-- Blood Compatibility Explorer -->
+      <section class="compatibility-container" aria-label="Interactive Blood Compatibility Matrix">
+        <div class="compatibility-header">
+          <h3>Interactive Blood Compatibility Explorer</h3>
+          <p id="compat-type-desc">Select a blood group to dynamically inspect donor &amp; recipient biological compatibility.</p>
+        </div>
+
+        <div class="compatibility-selector" id="compat-type-selector">
+          <!-- Dynamically populated via app.js -->
+        </div>
+
+        <div class="compat-results-grid">
+          <div class="compat-box">
+            <h4 style="color:var(--primary);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+              Can Safely Donate Red Cells To (Recipients)
+            </h4>
+            <div class="compat-chips" id="compat-donate-chips">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div class="compat-box">
+            <h4 style="color:var(--secondary);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Can Safely Receive Red Cells From (Donors)
+            </h4>
+            <div class="compat-chips" id="compat-receive-chips">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+    <!-- =======================================================================
+         TAB 2: DONOR DIRECTORY (Lab Ex 11 Front-End DML & Retrieval Task)
+         ======================================================================= -->
+    <section class="tab-view" id="tab-donors" role="tabpanel" aria-labelledby="tab-btn-donors">
+      
+      <div class="toolbar-card">
+        <div class="search-input-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="donor-search-input" placeholder="Search by SID, Name, City, or Contact Phone..." aria-label="Search Donors">
+        </div>
+
+        <div class="filter-group">
+          <select id="donor-blood-filter" class="filter-select" aria-label="Filter by Blood Group">
+            <option value="">All Blood Groups</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
+
+          <select id="donor-city-filter" class="filter-select" aria-label="Filter by City or Department">
+            <option value="">All Cities / Depts</option>
+          </select>
+
+          <button type="button" class="btn-primary" id="open-add-donor-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Register Donor (INSERT)
+          </button>
+        </div>
+      </div>
+
+      <!-- SQL Query Live Preview Banner for Laboratory Record -->
+      <div class="sql-query-preview" id="donor-sql-preview">
+        SQL Execution: SELECT DONOR_ID, NAME, BLOOD_GROUP, AGE, GENDER, PHONE, CITY, HEMOGLOBIN, STATUS FROM DONOR;
+      </div>
+
+      <!-- Donors Data Table -->
+      <div class="table-responsive" style="margin-top: 1rem;">
+        <table class="data-table" id="donors-table">
+          <thead>
+            <tr>
+              <th>SID / Donor ID</th>
+              <th>Full Name</th>
+              <th>Blood Group</th>
+              <th>Age (Gender)</th>
+              <th>Contact Phone</th>
+              <th>City Location</th>
+              <th>Hemoglobin</th>
+              <th>Last Donation</th>
+              <th>Status</th>
+              <th>Lab Actions (DML)</th>
+            </tr>
+          </thead>
+          <tbody id="donors-table-body">
+            <!-- Populated via app.js -->
+          </tbody>
+        </table>
+
+        <!-- Slide 45 Requirement: "Display a suitable message when no matching rows are returned" -->
+        <div id="donors-empty-state" class="empty-state" style="display:none;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <h4>No Matching Donors Returned</h4>
+          <p>No records match the requested filter condition. Try clearing your search or selecting a different blood group / city.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =======================================================================
+         TAB 3: BLOOD STOCK & INDIVIDUAL BAGS LEDGER
+         ======================================================================= -->
+    <section class="tab-view" id="tab-inventory" role="tabpanel" aria-labelledby="tab-btn-inventory">
+      
+      <div class="section-header">
+        <div class="section-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--primary)"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+          <h3>Individual Blood Bag Storage Units (Ledger)</h3>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table" id="blood-bags-table">
+          <thead>
+            <tr>
+              <th>Bag Barcode ID</th>
+              <th>Group</th>
+              <th>Component Type</th>
+              <th>Volume</th>
+              <th>Donor SID</th>
+              <th>Collection Date</th>
+              <th>Expiry Date</th>
+              <th>Chiller Storage Unit</th>
+              <th>Testing Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="blood-bags-table-body">
+            <!-- Populated via app.js -->
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- =======================================================================
+         TAB 4: HOSPITAL EMERGENCY ORDERS & TRANSACTION CHALLENGE
+         ======================================================================= -->
+    <section class="tab-view" id="tab-requests" role="tabpanel" aria-labelledby="tab-btn-requests">
+      
+      <div class="toolbar-card">
+        <div>
+          <h3 style="font-size:1.15rem; font-weight:800;">Hospital Blood Requests &amp; Transfusion Orders</h3>
+          <p style="color:var(--text-muted); font-size:0.85rem;">Demonstrates ACID Transaction workflow (setAutoCommit(false), verify stock, deduct units, and commit/rollback).</p>
+        </div>
+        <button type="button" class="btn-primary" onclick="document.getElementById('new-request-modal').showModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Create Hospital Order
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table" id="hospital-requests-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Hospital &amp; Timestamp</th>
+              <th>Patient Name</th>
+              <th>Group</th>
+              <th>Units Requested</th>
+              <th>Urgency Priority</th>
+              <th>Order Status</th>
+              <th>Transaction Action</th>
+            </tr>
+          </thead>
+          <tbody id="hospital-requests-table-body">
+            <!-- Populated via app.js -->
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- =======================================================================
+         TAB 5: DATABASE & JDBC / ODBC LABORATORY WORKBENCH
+         ======================================================================= -->
+    <section class="tab-view" id="tab-studio" role="tabpanel" aria-labelledby="tab-btn-studio">
+      
+      <div class="db-studio-container">
+        
+        <!-- Architecture Diagram Matching Lab Slides 2 & 8 -->
+        <article class="architecture-card" aria-label="ODBC and JDBC Architecture Workflow">
+          <div class="section-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--primary)"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <h3>Relational Front-End Database Architecture</h3>
+          </div>
+          <p style="color:var(--text-muted); font-size:0.875rem; margin-top:0.35rem;">
+            Visualizing Client-to-Database connectivity: How Java front-end applications communicate with relational databases via JDBC Driver and Driver Manager.
+          </p>
+
+          <div class="arch-flow">
+            <div class="arch-node active-node">
+              <h5>Front-End Client</h5>
+              <p>HemoPulse Web App / Java GUI</p>
+            </div>
+            <div class="arch-arrow">➔</div>
+            <div class="arch-node">
+              <h5>JDBC / ODBC Driver</h5>
+              <p>oracle.jdbc.OracleDriver (Type 4 Thin)</p>
+            </div>
+            <div class="arch-arrow">➔</div>
+            <div class="arch-node">
+              <h5>Network Listener</h5>
+              <p>localhost:1521 / TNS Listener</p>
+            </div>
+            <div class="arch-arrow">➔</div>
+            <div class="arch-node active-node">
+              <h5>Oracle Database (XE)</h5>
+              <p>DONOR &amp; BLOOD_STOCK Tables</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Interactive SQL Runner -->
+        <div class="sql-terminal-card">
+          <h4>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            Interactive In-Browser SQL Terminal
+          </h4>
+          <p>Execute real SQL queries on the active database tables to verify relational data and constraints.</p>
+
+          <div class="sql-quick-queries">
+            <span class="quick-sql-chip" data-sql="SELECT * FROM DONOR;">SELECT * FROM DONOR;</span>
+            <span class="quick-sql-chip" data-sql="SELECT * FROM DONOR WHERE blood group=&quot;ab-&quot;;">WHERE blood group="ab-"</span>
+            <span class="quick-sql-chip" data-sql="SELECT * FROM DONOR WHERE BLOOD_GROUP = 'O+';">WHERE BLOOD_GROUP = 'O+'</span>
+            <span class="quick-sql-chip" data-sql="SELECT * FROM DONOR WHERE CITY = 'Chennai';">WHERE CITY = 'Chennai'</span>
+            <span class="quick-sql-chip" data-sql="SELECT * FROM BLOOD_STOCK;">SELECT * FROM BLOOD_STOCK;</span>
+            <span class="quick-sql-chip" data-sql="SELECT * FROM HOSPITAL_REQUESTS;">SELECT * FROM HOSPITAL_REQUESTS;</span>
+            <span class="quick-sql-chip" data-sql="COMMIT;">COMMIT;</span>
+            <span class="quick-sql-chip" data-sql="ROLLBACK;">ROLLBACK;</span>
+          </div>
+
+          <textarea id="sql-query-input" class="sql-input-area" aria-label="SQL query input" spellcheck="false">SELECT * FROM DONOR WHERE BLOOD_GROUP = 'O-';</textarea>
+
+          <div class="sql-actions-row">
+            <button type="button" class="btn-primary" id="execute-sql-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Execute SQL Statement
+            </button>
+            <span style="font-size:0.775rem; color:var(--text-muted);">Simulates PreparedStatement and ResultSet traversal</span>
+          </div>
+
+          <div class="sql-result-box" id="sql-result-box" aria-live="polite">
+            <span style="color:var(--text-muted);">Results will appear here upon execution...</span>
+          </div>
+        </div>
+
+        <!-- Code Viewers Grid: Java JDBC Source & Oracle SQL DDL -->
+        <div class="studio-grid">
+          
+          <!-- Java JDBC Program -->
+          <article class="code-editor-card">
+            <div class="code-editor-header">
+              <div class="code-editor-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                BloodBankJDBC.java (Source)
+              </div>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span class="editor-tag">Java 17 / JDBC 4.2</span>
+                <button type="button" class="btn-secondary" id="copy-java-code-btn" style="padding:0.25rem 0.6rem; font-size:0.75rem;">Copy</button>
+              </div>
+            </div>
+            <pre class="code-editor-content" id="java-code-content"><code><span class="keyword">import</span> java.sql.*;
+<span class="keyword">import</span> java.util.Scanner;
+
+<span class="comment">// Relational Database: Blood Bank Management System JDBC</span>
+<span class="keyword">public class</span> <span class="type">BloodBankJDBC</span> {
+    <span class="keyword">private static final</span> String DB_URL = <span class="string">"jdbc:oracle:thin:@localhost:1521:XE"</span>;
+    <span class="keyword">private static final</span> String DB_USER = <span class="string">"system"</span>;
+    <span class="keyword">private static final</span> String DB_PASS = <span class="string">"password"</span>;
+
+    <span class="keyword">public static void</span> main(String[] args) {
+        <span class="comment">// 1. Load Oracle JDBC Driver</span>
+        <span class="type">Class</span>.forName(<span class="string">"oracle.jdbc.OracleDriver"</span>);
+
+        <span class="comment">// 2. Establish Connection</span>
+        <span class="keyword">try</span> (<span class="type">Connection</span> con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            System.out.println(<span class="string">"Connected to Oracle Database!"</span>);
+
+            <span class="comment">// 3. Parameterized INSERT using PreparedStatement</span>
+            String sqlInsert = <span class="string">"INSERT INTO DONOR VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"</span>;
+            <span class="type">PreparedStatement</span> pstmt = con.prepareStatement(sqlInsert);
+            pstmt.setString(<span class="number">1</span>, <span class="string">"D109"</span>);
+            pstmt.setString(<span class="number">2</span>, <span class="string">"Vikramaditya"</span>);
+            pstmt.setString(<span class="number">3</span>, <span class="string">"O+"</span>);
+            pstmt.setInt(<span class="number">4</span>, <span class="number">29</span>);
+            pstmt.setString(<span class="number">5</span>, <span class="string">"Male"</span>);
+            pstmt.setString(<span class="number">6</span>, <span class="string">"+91 98401 99999"</span>);
+            pstmt.setString(<span class="number">7</span>, <span class="string">"Chennai"</span>);
+            pstmt.setDouble(<span class="number">8</span>, <span class="number">14.6</span>);
+            pstmt.setString(<span class="number">9</span>, <span class="string">"Eligible"</span>);
+            <span class="keyword">int</span> rows = pstmt.executeUpdate();
+            System.out.println(rows + <span class="string">" row(s) inserted."</span>);
+
+            <span class="comment">// 4. Transaction Management (COMMIT / ROLLBACK)</span>
+            con.setAutoCommit(<span class="keyword">false</span>);
+            <span class="comment">// Deduct stock &amp; fulfill emergency request...</span>
+            con.commit();
+        }
+    }
+}</code></pre>
+          </article>
+
+          <!-- Oracle SQL Schema DDL -->
+          <article class="code-editor-card">
+            <div class="code-editor-header">
+              <div class="code-editor-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                schema.sql (Oracle SQL*Plus Script)
+              </div>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span class="editor-tag">SQL*Plus DDL</span>
+                <button type="button" class="btn-secondary" id="copy-sql-schema-btn" style="padding:0.25rem 0.6rem; font-size:0.75rem;">Copy</button>
+              </div>
+            </div>
+            <pre class="code-editor-content" id="oracle-sql-schema-content"><code><span class="comment">-- Oracle SQL*Plus DDL Script</span>
+<span class="keyword">CREATE TABLE</span> DONOR (
+    DONOR_ID <span class="type">VARCHAR2(10)</span> <span class="keyword">PRIMARY KEY</span>,
+    NAME <span class="type">VARCHAR2(100)</span> <span class="keyword">NOT NULL</span>,
+    BLOOD_GROUP <span class="type">VARCHAR2(5)</span> <span class="keyword">NOT NULL</span>,
+    AGE <span class="type">NUMBER(3)</span> <span class="keyword">CHECK</span> (AGE <span class="keyword">BETWEEN</span> <span class="number">18</span> <span class="keyword">AND</span> <span class="number">65</span>),
+    GENDER <span class="type">VARCHAR2(10)</span>,
+    PHONE <span class="type">VARCHAR2(20)</span> <span class="keyword">NOT NULL</span>,
+    CITY <span class="type">VARCHAR2(50)</span> <span class="keyword">NOT NULL</span>,
+    HEMOGLOBIN <span class="type">NUMBER(4,1)</span>,
+    STATUS <span class="type">VARCHAR2(15)</span> <span class="keyword">DEFAULT</span> <span class="string">'Eligible'</span>
+);
+
+<span class="keyword">CREATE TABLE</span> BLOOD_STOCK (
+    BLOOD_GROUP <span class="type">VARCHAR2(5)</span> <span class="keyword">PRIMARY KEY</span>,
+    UNITS_AVAILABLE <span class="type">NUMBER(5)</span> <span class="keyword">DEFAULT</span> <span class="number">0</span>,
+    MAX_CAPACITY <span class="type">NUMBER(5)</span> <span class="keyword">DEFAULT</span> <span class="number">50</span>,
+    MIN_SAFE_LEVEL <span class="type">NUMBER(5)</span> <span class="keyword">DEFAULT</span> <span class="number">12</span>,
+    STATUS <span class="type">VARCHAR2(20)</span> <span class="keyword">DEFAULT</span> <span class="string">'ADEQUATE'</span>
+);
+
+<span class="keyword">CREATE TABLE</span> HOSPITAL_REQUESTS (
+    REQUEST_ID <span class="type">VARCHAR2(15)</span> <span class="keyword">PRIMARY KEY</span>,
+    HOSPITAL_NAME <span class="type">VARCHAR2(100)</span> <span class="keyword">NOT NULL</span>,
+    PATIENT_NAME <span class="type">VARCHAR2(100)</span> <span class="keyword">NOT NULL</span>,
+    BLOOD_GROUP <span class="type">VARCHAR2(5)</span> <span class="keyword">NOT NULL</span>,
+    UNITS_REQUESTED <span class="type">NUMBER(3)</span>,
+    URGENCY <span class="type">VARCHAR2(25)</span>,
+    STATUS <span class="type">VARCHAR2(15)</span> <span class="keyword">DEFAULT</span> <span class="string">'Pending'</span>
+);
+
+<span class="keyword">COMMIT</span>;</code></pre>
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =======================================================================
+         TAB 6: DONOR HEALTH SCREENING & ELIGIBILITY CALCULATOR
+         Accepts user inputs -> Processes information -> Displays appropriate output
+         Generates & executes relational DDL/DML
+         ======================================================================= -->
+    <section class="tab-view" id="tab-eligibility" role="tabpanel" aria-labelledby="tab-btn-eligibility">
+      
+      <div class="toolbar-card" style="margin-bottom: 1rem;">
+        <div>
+          <h3 style="font-size:1.2rem; font-weight:800; display:flex; align-items:center; gap:0.5rem;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            Donor Clinical Eligibility &amp; Safe Donation Volume Assessment
+          </h3>
+          <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">
+            <strong>Clinical Criteria:</strong> Collects clinical &amp; physical inputs (Age, Weight, Hemoglobin, BP, Pulse, Interval), evaluates against WHO/NACO blood banking guidelines, computes safe volume &amp; component yield, and provides relational database persistence (DML INSERT).
+          </p>
+        </div>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <button type="button" class="quick-demo-pill" id="load-demo-eligible-btn">
+            ✓ Demo Eligible Donor
+          </button>
+          <button type="button" class="quick-demo-pill" id="load-demo-anemic-btn">
+            ⚠ Demo Deferred (Low Hb)
+          </button>
+          <button type="button" class="quick-demo-pill" id="load-demo-underweight-btn">
+            ✕ Demo Deferred (&lt;50 kg)
+          </button>
+        </div>
+      </div>
+
+      <div class="eligibility-grid">
+        
+        <!-- Input Form (Left Column) -->
+        <div class="calculator-card">
+          <div class="calc-section-title">
+            <h3>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Step 1: Clinical &amp; Physiological Inputs
+            </h3>
+            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Standard Vitals</span>
+          </div>
+
+          <form id="eligibility-form">
+            <div class="vitals-form-grid">
+              
+              <div class="form-group">
+                <label for="el-name">Donor Full Name *</label>
+                <input type="text" id="el-name" required value="Aditya Sen" placeholder="Full name">
+              </div>
+
+              <div class="form-group">
+                <label for="el-blood-group">Blood Group *</label>
+                <select id="el-blood-group" required>
+                  <option value="O+" selected>O+ (Common Positive)</option>
+                  <option value="O-">O- (Universal Red Cell)</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+ (Universal Recipient)</option>
+                  <option value="AB-">AB- (Rare Subtype)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="el-gender">Gender *</label>
+                <select id="el-gender" required>
+                  <option value="Male" selected>Male (90 days interval)</option>
+                  <option value="Female">Female (120 days interval)</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="el-age">Age (Years) *</label>
+                <input type="number" id="el-age" required min="16" max="75" value="26">
+                <span class="form-hint">Standard check: 18 – 65 years</span>
+              </div>
+
+              <div class="form-group">
+                <label for="el-weight">Body Weight (kg) *</label>
+                <input type="number" id="el-weight" required min="35" max="150" step="0.5" value="68">
+                <span class="form-hint">Threshold: ≥ 50 kg for safe donation</span>
+              </div>
+
+              <div class="form-group">
+                <label for="el-hemoglobin">Hemoglobin Level (g/dL) *</label>
+                <input type="number" id="el-hemoglobin" required min="7" max="22" step="0.1" value="14.2">
+                <span class="form-hint">Threshold: ≥ 12.5 g/dL (WHO standard)</span>
+              </div>
+
+              <div class="form-group">
+                <label for="el-systolic">Systolic BP (mmHg) *</label>
+                <input type="number" id="el-systolic" required min="70" max="220" value="120">
+                <span class="form-hint">Safe range: 100 – 140 mmHg</span>
+              </div>
+
+              <div class="form-group">
+                <label for="el-diastolic">Diastolic BP (mmHg) *</label>
+                <input type="number" id="el-diastolic" required min="40" max="140" value="80">
+                <span class="form-hint">Safe range: 60 – 90 mmHg</span>
+              </div>
+
+              <div class="form-group">
+                <label for="el-pulse">Resting Pulse Rate (bpm) *</label>
+                <input type="number" id="el-pulse" required min="40" max="160" value="72">
+                <span class="form-hint">Safe range: 60 – 100 bpm</span>
+              </div>
+
+              <div class="form-group">
+                <label for="el-interval">Days Since Last Donation *</label>
+                <input type="number" id="el-interval" required min="0" max="1000" value="115">
+                <span class="form-hint">Min 90d (Male) / 120d (Female)</span>
+              </div>
+
+              <div class="form-group full-span">
+                <label style="margin-bottom:0.4rem; display:block;">Medical Risk Questionnaire</label>
+                <div style="display:flex; flex-direction:column; gap:0.4rem; font-size:0.8rem; background:var(--bg-surface-secondary); padding:0.75rem; border-radius:var(--radius-sm);">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="el-flag-tattoo">
+                    <span>Recent body tattoo or piercing in last 6 months (6-month deferral)</span>
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="el-flag-surgery">
+                    <span>Major dental extraction or surgery in last 3 months</span>
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="el-flag-antibiotics">
+                    <span>Currently taking antibiotics, anticoagulants, or steroids</span>
+                  </label>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="calc-actions-bar">
+              <button type="submit" class="btn-primary" style="flex:1;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Process Vitals &amp; Assess Eligibility
+              </button>
+              <button type="button" class="btn-secondary" id="reset-eligibility-form-btn">
+                Reset
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Output Display (Right Column) -->
+        <div class="calculator-card" id="assessment-output-container">
+          <div class="calc-section-title">
+            <h3>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Step 2: Processing Report &amp; Output Display
+            </h3>
+            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Algorithmic Decision</span>
+          </div>
+
+          <!-- Dynamic Assessment Content will be rendered here -->
+          <div id="assessment-output-body">
+            <div style="text-align:center; padding:3rem 1rem; color:var(--text-muted);">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:0.75rem; opacity:0.5;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+              <h4>Vitals Awaiting Processing</h4>
+              <p style="font-size:0.85rem; margin-top:0.35rem;">Click "Process Vitals &amp; Assess Eligibility" or choose a quick demo pill to evaluate clinical eligibility and safe donation volume.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =======================================================================
+         TAB 7: DDL & DML COMMAND CENTER
+         Includes all DDL and DML commands with 1-click execution and copy
+         ======================================================================= -->
+    <section class="tab-view" id="tab-sqlcommands" role="tabpanel" aria-labelledby="tab-btn-sqlcommands">
+      
+      <div class="command-center-header">
+        <div class="toolbar-card">
+          <div>
+            <h3 style="font-size:1.2rem; font-weight:800; display:flex; align-items:center; gap:0.5rem;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              SQL DDL &amp; DML Command Center
+            </h3>
+            <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">
+              <strong>Database Operations:</strong> Full catalogue of Data Definition Language (DDL) and Data Manipulation Language (DML) statements for the Blood Bank relational database, with one-click interactive execution and PreparedStatement parameter mapping.
+            </p>
+          </div>
+        </div>
+
+        <div class="sql-category-tabs">
+          <button type="button" class="sql-category-btn active" data-cat="all">All SQL Commands</button>
+          <button type="button" class="sql-category-btn" data-cat="ddl">DDL (Data Definition)</button>
+          <button type="button" class="sql-category-btn" data-cat="dml">DML (Data Manipulation)</button>
+          <button type="button" class="sql-category-btn" data-cat="tcl">TCL (Transaction Control)</button>
+        </div>
+      </div>
+
+      <div class="sql-cards-grid" id="sql-cards-container">
+        <!-- Dynamically rendered via app.js -->
+      </div>
+
+    </section>
+
+    <!-- =======================================================================
+         TAB 8: SYSTEM INSTALLATION & EXECUTION GUIDE
+         Includes all installation commands, Java JDBC setup, ODBC DSN, and SQL*Plus
+         ======================================================================= -->
+    <section class="tab-view" id="tab-guide" role="tabpanel" aria-labelledby="tab-btn-guide">
+      
+      <div class="toolbar-card" style="margin-bottom:1rem;">
+        <div>
+          <h3 style="font-size:1.2rem; font-weight:800; display:flex; align-items:center; gap:0.5rem;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            System Setup, Installation &amp; Execution Guide
+          </h3>
+          <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">
+            <strong>System Instructions:</strong> Step-by-step installation commands, database connectivity driver configuration (Java JDBC, ODBC DSN, SQL*Plus), and frontend execution instructions.
+          </p>
+        </div>
+      </div>
+
+      <div class="guide-container">
+        
+        <!-- Step 1: Run Web Application -->
+        <article class="guide-step-card">
+          <h4>
+            <span class="guide-step-num">1</span>
+            Web Application &amp; REST Server Execution (Node.js)
+          </h4>
+          <p style="color:var(--text-muted); font-size:0.875rem;">
+            Runs the client dashboard, interactive SQL engine, and eligibility processor on port 3000.
+          </p>
+          <div class="guide-terminal-box">
+            <button type="button" class="guide-copy-btn" onclick="navigator.clipboard.writeText('node server.js')">Copy</button>
+            <code># Open PowerShell or Command Prompt in project folder<br>cd c:\Users\jahna\bloodBank<br><br># Start the web &amp; REST API server<br>node server.js</code>
+          </div>
+          <p style="font-size:0.825rem; color:var(--text-muted);">
+            Open browser at <strong><a href="http://localhost:3000" target="_blank" style="color:var(--primary);">http://localhost:3000</a></strong> or open <strong><a href="login.html" target="_blank" style="color:var(--secondary);">login.html</a></strong> for the dedicated staff login page.
+          </p>
+        </article>
+
+        <!-- Step 2: Java JDBC Driver Setup & Compilation -->
+        <article class="guide-step-card">
+          <h4>
+            <span class="guide-step-num">2</span>
+            Java JDBC Driver Installation &amp; Program Compilation
+          </h4>
+          <p style="color:var(--text-muted); font-size:0.875rem;">
+            Fulfills Java JDBC requirement using Type-4 Oracle JDBC Driver (<code>ojdbc8.jar</code> / <code>ojdbc11.jar</code>) or PostgreSQL/H2 driver.
+          </p>
+          <div class="guide-terminal-box">
+            <button type="button" class="guide-copy-btn" onclick="navigator.clipboard.writeText('javac -cp .;ojdbc8.jar BloodBankJDBC.java\njava -cp .;ojdbc8.jar BloodBankJDBC')">Copy</button>
+            <code># 1. Download Oracle JDBC Driver (if not already downloaded)<br>curl -O https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc8/19.8.0.0/ojdbc8-19.8.0.0.jar<br>ren ojdbc8-19.8.0.0.jar ojdbc8.jar<br><br># 2. Compile Java JDBC Application<br>javac -cp ".;ojdbc8.jar" BloodBankJDBC.java<br><br># 3. Run Java JDBC Application<br>java -cp ".;ojdbc8.jar" BloodBankJDBC</code>
+          </div>
+          <p style="font-size:0.825rem; color:var(--text-muted);">
+            Includes full parameter binding via <code>PreparedStatement</code>, result iteration with <code>ResultSet</code>, and transactional dispatch with <code>commit()</code> &amp; <code>rollback()</code>.
+          </p>
+        </article>
+
+        <!-- Step 3: Oracle Database DDL Execution -->
+        <article class="guide-step-card">
+          <h4>
+            <span class="guide-step-num">3</span>
+            Oracle Database Relational Schema Initialization (SQL*Plus)
+          </h4>
+          <p style="color:var(--text-muted); font-size:0.875rem;">
+            Loads normalized relational tables, primary keys, foreign keys, and constraints into Oracle Express Edition (XE).
+          </p>
+          <div class="guide-terminal-box">
+            <button type="button" class="guide-copy-btn" onclick="navigator.clipboard.writeText('sqlplus system/password@localhost:1521/XE\n@schema.sql')">Copy</button>
+            <code># Connect to Oracle Database via SQL*Plus<br>sqlplus system/password@localhost:1521/XE<br><br># Execute the schema DDL script<br>@schema.sql<br><br># Verify created relational tables<br>SELECT table_name FROM user_tables;</code>
+          </div>
+        </article>
+
+        <!-- Step 4: ODBC DSN Configuration -->
+        <article class="guide-step-card">
+          <h4>
+            <span class="guide-step-num">4</span>
+            ODBC Data Source Name (DSN) Configuration (Windows)
+          </h4>
+          <p style="color:var(--text-muted); font-size:0.875rem;">
+            Fulfills Lab Exercise 11 ODBC front-end interface configuration.
+          </p>
+          <div style="background:var(--bg-surface-secondary); padding:0.85rem; border-radius:var(--radius-md); font-size:0.825rem; line-height:1.6; border:1px solid var(--border-subtle);">
+            <ol style="padding-left:1.25rem;">
+              <li>Press <strong>Win + R</strong>, type <code>odbcad32.exe</code>, and press Enter to open ODBC Data Source Administrator (64-bit).</li>
+              <li>Select the <strong>System DSN</strong> tab and click <strong>Add...</strong>.</li>
+              <li>Select <strong>Oracle in OraClient11g_home1</strong> (or <strong>Oracle in XE</strong>) and click <strong>Finish</strong>.</li>
+              <li>Fill in the parameters:
+                <ul style="margin:0.25rem 0 0.25rem 1rem;">
+                  <li><strong>Data Source Name (DSN):</strong> <code>BloodBankDSN</code></li>
+                  <li><strong>Description:</strong> <code>Blood Bank Management System ODBC</code></li>
+                  <li><strong>TNS Service Name:</strong> <code>XE</code></li>
+                  <li><strong>User ID:</strong> <code>system</code></li>
+                </ul>
+              </li>
+              <li>Click <strong>Test Connection</strong>, enter password <code>password</code>, and verify <em>"Connection successful"</em>.</li>
+              <li>Click <strong>OK</strong> to save the System DSN.</li>
+            </ol>
+          </div>
+        </article>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       MODALS & DIALOGS (Using Native HTML5 <dialog> Elements)
+       ========================================================================= -->
+
+  <!-- Modal 1: Register New Donor (INSERT with validation) -->
+  <dialog class="custom-modal" id="add-donor-modal" aria-labelledby="add-donor-title">
+    <div class="modal-header">
+      <h3 id="add-donor-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--primary)"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+        Register New Blood Donor (INSERT)
+      </h3>
+      <button type="button" class="modal-close-btn" aria-label="Close dialog">✕</button>
+    </div>
+    <form id="add-donor-form">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="add-donor-id">Donor SID / ID *</label>
+            <input type="text" id="add-donor-id" name="donor_id" required pattern="[A-Za-z0-9]+" placeholder="e.g. D109">
+            <span class="form-hint">Primary Key (Unique constraint)</span>
+          </div>
+
+          <div class="form-group">
+            <label for="add-blood-group">Blood Group *</label>
+            <select id="add-blood-group" name="blood_group" required>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="add-name">Full Legal Name *</label>
+            <input type="text" id="add-name" name="name" required placeholder="Enter donor full name">
+          </div>
+
+          <div class="form-group">
+            <label for="add-age">Age (Years) *</label>
+            <input type="number" id="add-age" name="age" min="18" max="65" value="25" required>
+            <span class="form-hint">Check constraint: 18 - 65 yrs</span>
+          </div>
+
+          <div class="form-group">
+            <label for="add-gender">Gender *</label>
+            <select id="add-gender" name="gender" required>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="add-phone">Phone Number *</label>
+            <input type="tel" id="add-phone" name="phone" required placeholder="+91 98401 00000">
+          </div>
+
+          <div class="form-group">
+            <label for="add-email">Email Address</label>
+            <input type="email" id="add-email" name="email" placeholder="donor@example.com">
+          </div>
+
+          <div class="form-group">
+            <label for="add-city">City Location *</label>
+            <input type="text" id="add-city" name="city" required placeholder="e.g. Chennai">
+          </div>
+
+          <div class="form-group">
+            <label for="add-hemoglobin">Hemoglobin (g/dL) *</label>
+            <input type="number" id="add-hemoglobin" name="hemoglobin" step="0.1" min="8" max="20" value="13.5" required>
+            <span class="form-hint">&gt;= 12.5 g/dL required for eligibility</span>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="add-last-donation">Last Donation Date</label>
+            <input type="date" id="add-last-donation" name="last_donation">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary modal-cancel-btn">Cancel</button>
+        <button type="submit" class="btn-primary">Execute INSERT &amp; Commit</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Modal 2: Edit Donor (UPDATE) -->
+  <dialog class="custom-modal" id="edit-donor-modal" aria-labelledby="edit-donor-title">
+    <div class="modal-header">
+      <h3 id="edit-donor-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Update Donor Record (UPDATE)
+      </h3>
+      <button type="button" class="modal-close-btn" aria-label="Close dialog">✕</button>
+    </div>
+    <form id="edit-donor-form">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="edit-donor-id">Donor SID (Target Key)</label>
+            <input type="text" id="edit-donor-id" name="donor_id" readonly style="background:var(--bg-surface-secondary); font-family:var(--font-mono);">
+          </div>
+          <div class="form-group">
+            <label for="edit-blood-group">Blood Group</label>
+            <input type="text" id="edit-blood-group" name="blood_group" readonly style="background:var(--bg-surface-secondary);">
+          </div>
+          <div class="form-group full-width">
+            <label for="edit-name">Full Name *</label>
+            <input type="text" id="edit-name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-age">Age</label>
+            <input type="number" id="edit-age" name="age" readonly style="background:var(--bg-surface-secondary);">
+          </div>
+          <div class="form-group">
+            <label for="edit-phone">Contact Phone *</label>
+            <input type="tel" id="edit-phone" name="phone" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-city">City Location *</label>
+            <input type="text" id="edit-city" name="city" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-hemoglobin">Hemoglobin (g/dL) *</label>
+            <input type="number" id="edit-hemoglobin" name="hemoglobin" step="0.1" min="8" max="20" required>
+          </div>
+          <div class="form-group full-width">
+            <label for="edit-status">Donor Status *</label>
+            <select id="edit-status" name="status" required>
+              <option value="Eligible">Eligible</option>
+              <option value="Deferred">Deferred</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary modal-cancel-btn">Cancel</button>
+        <button type="submit" class="btn-primary">Execute UPDATE</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Modal 3: Emergency Hospital Order -->
+  <dialog class="custom-modal" id="new-request-modal" aria-labelledby="new-request-title">
+    <div class="modal-header">
+      <h3 id="new-request-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--danger)"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+        New Hospital Blood Order
+      </h3>
+      <button type="button" class="modal-close-btn" aria-label="Close dialog">✕</button>
+    </div>
+    <form id="new-request-form">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="req-id-input">Order Request ID *</label>
+            <input type="text" id="req-id-input" name="req_id" required readonly style="background:var(--bg-surface-secondary); font-family:var(--font-mono);">
+          </div>
+          <div class="form-group">
+            <label for="req-urgency">Urgency Level *</label>
+            <select id="req-urgency" name="urgency" required>
+              <option value="Emergency STAT">Emergency STAT (Immediate)</option>
+              <option value="High Priority">High Priority (&lt; 4 Hours)</option>
+              <option value="Routine">Routine (Elective Surgery)</option>
+            </select>
+          </div>
+          <div class="form-group full-width">
+            <label for="req-hospital">Hospital / Clinic Name *</label>
+            <input type="text" id="req-hospital" name="hospital" required placeholder="e.g. Apollo Hospital, Greams Road">
+          </div>
+          <div class="form-group full-width">
+            <label for="req-patient">Patient Full Name *</label>
+            <input type="text" id="req-patient" name="patient" required placeholder="Patient legal name">
+          </div>
+          <div class="form-group">
+            <label for="req-blood-group">Required Blood Group *</label>
+            <select id="req-blood-group" name="blood_group" required>
+              <option value="O-">O- (Universal)</option>
+              <option value="O+">O+</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="req-units">Units Required (Bags) *</label>
+            <input type="number" id="req-units" name="units" min="1" max="10" value="2" required>
+          </div>
+          <div class="form-group full-width">
+            <label for="req-component">Component Type *</label>
+            <select id="req-component" name="component" required>
+              <option value="Packed Red Cells">Packed Red Cells (PRBC)</option>
+              <option value="Whole Blood">Whole Blood</option>
+              <option value="Platelets">Platelets</option>
+              <option value="Fresh Frozen Plasma">Fresh Frozen Plasma (FFP)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary modal-cancel-btn">Cancel</button>
+        <button type="submit" class="btn-primary">Submit Blood Order</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Modal 4: Intake New Blood Bag -->
+  <dialog class="custom-modal" id="add-bag-modal" aria-labelledby="add-bag-title">
+    <div class="modal-header">
+      <h3 id="add-bag-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--primary)"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+        Intake Blood Bag Storage
+      </h3>
+      <button type="button" class="modal-close-btn" aria-label="Close dialog">✕</button>
+    </div>
+    <form id="add-bag-form">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="bag-id-input">Bag Barcode ID *</label>
+            <input type="text" id="bag-id-input" name="bag_id" required readonly style="background:var(--bg-surface-secondary); font-family:var(--font-mono);">
+          </div>
+          <div class="form-group">
+            <label for="bag-donor-id">Donor SID *</label>
+            <input type="text" id="bag-donor-id" name="donor_id" value="D101" required placeholder="e.g. D101">
+          </div>
+          <div class="form-group">
+            <label for="bag-blood-group">Blood Group *</label>
+            <select id="bag-blood-group" name="blood_group" required>
+              <option value="O-">O-</option>
+              <option value="O+">O+</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="bag-volume">Volume (mL) *</label>
+            <input type="number" id="bag-volume" name="volume_ml" value="450" required>
+          </div>
+          <div class="form-group full-width">
+            <label for="bag-component">Component *</label>
+            <select id="bag-component" name="component" required>
+              <option value="Packed Red Cells (PRBC)">Packed Red Cells (PRBC - 42 days)</option>
+              <option value="Whole Blood">Whole Blood (35 days)</option>
+              <option value="Platelet Concentrate">Platelet Concentrate (5 days)</option>
+              <option value="Fresh Frozen Plasma (FFP)">Fresh Frozen Plasma (FFP - 1 year)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="bag-collected">Collection Date *</label>
+            <input type="date" id="bag-collected" name="collected_date" required value="2026-10-12">
+          </div>
+          <div class="form-group">
+            <label for="bag-chiller">Storage Vault *</label>
+            <select id="bag-chiller" name="chiller" required>
+              <option value="Vault-A (Chiller #1, -4°C)">Vault-A (Chiller #1, -4°C)</option>
+              <option value="Vault-B (Chiller #2, -4°C)">Vault-B (Chiller #2, -4°C)</option>
+              <option value="Cryo-Vault (-25°C)">Cryo-Vault (-25°C)</option>
+              <option value="Agitator Unit #1 (22°C)">Platelet Agitator (22°C)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary modal-cancel-btn">Cancel</button>
+        <button type="submit" class="btn-primary">Register Blood Bag</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Modal 5: Printable Donor Identity Card -->
+  <dialog class="custom-modal" id="donor-card-modal" aria-labelledby="donor-card-modal-title">
+    <div class="modal-header">
+      <h3 id="donor-card-modal-title">Official Blood Donor Identity Card</h3>
+      <button type="button" class="modal-close-btn" aria-label="Close dialog">✕</button>
+    </div>
+    <div class="modal-body" id="donor-card-body">
+      <!-- Populated via app.js -->
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary" onclick="window.print()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print Card
+      </button>
+      <button type="button" class="btn-primary modal-cancel-btn">Done</button>
+    </div>
+  </dialog>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- App Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>
+        <strong>HemoPulse™ Blood Bank Management System</strong> — Healthcare Donor &amp; Inventory Management
+      </div>
+      <div>
+        Vellore Institute of Technology (VIT Chennai) • School of Computer Science &amp; Engineering
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
